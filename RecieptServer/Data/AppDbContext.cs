@@ -20,6 +20,9 @@ namespace ReceiptServer.Data
         {
             modelBuilder.Entity<Receipt>(entity =>
             {
+                entity.Property(r => r.Id)
+                      .UseIdentityColumn(seed: 1001, increment: 1);
+
                 entity.HasMany(r => r.ReceiptArticles)
                       .WithOne(ri => ri.Receipt)
                       .HasForeignKey(ri => ri.ReceiptId)
@@ -32,6 +35,9 @@ namespace ReceiptServer.Data
 
             modelBuilder.Entity<Article>(entity =>
             {
+                entity.Property(a => a.Id)
+                      .UseIdentityColumn(seed: 1001, increment: 1);
+
                 entity.HasMany(a => a.ReceiptArticles)
                       .WithOne(ri => ri.Article)
                       .HasForeignKey(ri => ri.ArticleId)
@@ -73,42 +79,6 @@ namespace ReceiptServer.Data
             );
         }
 
-        // Ensure totals are calculated before saving
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var changedReceipts = ChangeTracker
-                .Entries<Receipt>()
-                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified)
-                .ToList();
 
-            foreach (var entry in changedReceipts)
-            {
-                var receipt = entry.Entity;
-                decimal total = 0m;
-
-                // If the receipt has its ReceiptArticles loaded (common when created/updated via API),
-                // use them directly.
-                if (receipt.ReceiptArticles != null && receipt.ReceiptArticles.Any())
-                {
-                    total = RecepitCalculator.CalculateTotalReceiptAmount(receipt.ReceiptArticles);
-                }
-                else if (receipt.Id != 0)
-                {
-                    // Otherwise load current lines from DB to compute total (useful on updates).
-                    var items = await ReceiptArticles
-                        .Where(ra => ra.ReceiptId == receipt.Id)
-                        .ToListAsync(cancellationToken);
-                    total = RecepitCalculator.CalculateTotalReceiptAmount(items);
-                }
-
-                receipt.TotalAmount = total;
-            }
-
-            return await base.SaveChangesAsync(cancellationToken);
-        }
-
-        // Optional: forward synchronous calls to the async implementation
-        public override int SaveChanges()
-            => SaveChangesAsync().GetAwaiter().GetResult();
     }
 }

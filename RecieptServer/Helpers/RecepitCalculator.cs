@@ -1,22 +1,23 @@
 ﻿using ReceiptServer.Models;
+using RecieptServer.Models;
 
 namespace ReceiptServer.Helpers
 {
     public class RecepitCalculator
     {
-        public static decimal CalculateTotalReceiptAmount(List<ReceiptArticle> receiptItems)
+        public static decimal CalculateTotalReceiptAmount(List<ReceiptArticleDTO> receiptItemsDTO)
         {
             decimal total = 0m;
-            foreach (var item in receiptItems)
+            foreach (var item in receiptItemsDTO)
             {
                 total += item.Total;
             }
             return total;
         }
-        public static decimal CalculateTotalArticleAmount(ReceiptArticle receiptArticle)
+        public static decimal CalculateTotalArticleAmount(ReceiptArticleDTO receiptArticleDTO)
         {
-            receiptArticle.Total = receiptArticle.UnitPrice * receiptArticle.Quantity;
-            return receiptArticle.Total;
+            receiptArticleDTO.Total = receiptArticleDTO.UnitPrice * receiptArticleDTO.Quantity;
+            return receiptArticleDTO.Total;
         }
     }
 }

@@ -3,6 +3,8 @@ using ReceiptServer.Data;
 using ReceiptServer.Models;
 using ReceiptServer.Repositories;
 using ReceiptServer.Services;
+using RecieptServer;
+using RecieptServer.Models;
 using RecieptServer.Services;
 using System.Text.Json.Serialization;
 
@@ -33,9 +35,12 @@ namespace ReceiptServer
             });
 
             // for the concrete Receipt service
-            builder.Services.AddScoped<IReceiptServerService<Receipt>, ReceiptService>();
+            builder.Services.AddScoped<IReceiptServerService<ReceiptDTO>, ReceiptService>();
 
             builder.Services.AddScoped<IReceiptServiceRepositoriy<Receipt>, ReceiptRepository>();
+            builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionToDB")));
 

@@ -3,6 +3,8 @@ using ReceiptServer.Repositories;
 using System.Net;
 using ReceiptServer.Helpers;
 using RecieptServer.Services;
+using RecieptServer.Models;
+using AutoMapper;
 
 
 namespace ReceiptServer.Services
@@ -17,17 +19,19 @@ namespace ReceiptServer.Services
     //    Task<APIResponse<Receipt>> DeleteReceiptAsync(int id);
     //}
 
-    public class ReceiptService : IReceiptServerService<Receipt>
+    public class ReceiptService : IReceiptServerService<ReceiptDTO>
     {
         private readonly IReceiptServiceRepositoriy<Receipt> _receiptRepository;
-        public ReceiptService(IReceiptServiceRepositoriy<Receipt> receiptRepository)
+        private readonly IMapper _mapper;
+        public ReceiptService(IReceiptServiceRepositoriy<Receipt> receiptRepository, IMapper mapper)
         {
             _receiptRepository = receiptRepository;
+            _mapper = mapper;
         }
 
-        public async Task<APIResponse<Receipt>> CreateAsync(Receipt receipt)
+        public async Task<APIResponse<ReceiptDTO>> CreateAsync(ReceiptDTO receiptDTO)
         {
-            var response = new APIResponse<Receipt>
+            var response = new APIResponse<ReceiptDTO>
             {
                 IsSuccess = false,
                 StatusCode = HttpStatusCode.BadRequest
@@ -35,28 +39,30 @@ namespace ReceiptServer.Services
             try
             {
 
-                if (receipt == null || receipt.ReceiptArticles == null || !receipt.ReceiptArticles.Any())
+                if (receiptDTO == null || receiptDTO.ReceiptArticles == null || !receiptDTO.ReceiptArticles.Any())
                 {
                     response.ErrorMessages.Add("Invalid receipt data.");
                     return response;
                 }
-                foreach (var article in receipt.ReceiptArticles)
+                foreach (var article in receiptDTO.ReceiptArticles)
                 {
                     RecepitCalculator.CalculateTotalArticleAmount(article);
                 }
 
+                var receiptArticles = _mapper.Map<List<ReceiptArticle>>(receiptDTO.ReceiptArticles);
+                var receiptTotal = RecepitCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
                 var createdReceipt = new Receipt
                 {
-                    Date = receipt.Date,
-                    ReceiptArticles = receipt.ReceiptArticles,
-                    TotalAmount = RecepitCalculator.CalculateTotalReceiptAmount(receipt.ReceiptArticles)
+                    Date = receiptDTO.Date,
+                    ReceiptArticles = receiptArticles,
+                    TotalAmount = receiptTotal
                 };
 
 
 
                 await _receiptRepository.CreateAsync(createdReceipt);
                 await _receiptRepository.SaveAsync();
-                response.Result = createdReceipt;
+                response.Result = _mapper.Map<ReceiptDTO>(createdReceipt);
                 response.IsSuccess = true;
                 response.StatusCode = HttpStatusCode.Created;
             }
@@ -72,16 +78,19 @@ namespace ReceiptServer.Services
 
 
 
-        public async Task<APIResponse<List<Receipt>>> GetAllAsync()
+        public async Task<APIResponse<List<ReceiptDTO>>> GetAllAsync()
         {
-            var response = new APIResponse<List<Receipt>>();
+            var response = new APIResponse<List<ReceiptDTO>>();
             try
             {
                
                 var receipts = await _receiptRepository.GetAllAsync();
-                response.Result = receipts.ToList();
+                var dtoList = _mapper.Map<List<ReceiptDTO>>(receipts);
+
+                response.Result = dtoList;
                 response.IsSuccess = true;
                 response.StatusCode = HttpStatusCode.OK;
+
             }
             catch (Exception ex)
             {
@@ -92,15 +101,16 @@ namespace ReceiptServer.Services
             return response;
         }
 
-        public async Task<APIResponse<Receipt>> GetByIdAsync(int id)
+        public async Task<APIResponse<ReceiptDTO>> GetByIdAsync(int id)
         {// Meddelande bör ge svar om kvittonummer ist för id
-            var response = new APIResponse<Receipt>();
+            var response = new APIResponse<ReceiptDTO>();
             try
             {
                 var receipt = await _receiptRepository.GetByIdAsync(id);
+                var receiptDTO = _mapper.Map<ReceiptDTO>(receipt);
                 if (receipt != null)
                 {
-                    response.Result = receipt;
+                    response.Result = receiptDTO;
                     response.IsSuccess = true;
                     response.StatusCode = HttpStatusCode.OK;
                 }
@@ -122,25 +132,26 @@ namespace ReceiptServer.Services
         }
         
 
-        public async Task<APIResponse<Receipt>> UpdateAsync(Receipt receipt)
+        public async Task<APIResponse<ReceiptDTO>> UpdateAsync(ReceiptDTO receiptDTO)
         {
-            var response = new APIResponse<Receipt>
+            var response = new APIResponse<ReceiptDTO>
             {
                 IsSuccess = false,
                 StatusCode = HttpStatusCode.NotImplemented
             };
 
             try {                 
-                var existingReceipt = await _receiptRepository.GetByIdAsync(receipt.Id);
-                if (existingReceipt != null)
+                var existingReceipt = await _receiptRepository.GetByIdAsync(receiptDTO.Id);
+                if (existingReceipt != null && existingReceipt.Id == receiptDTO.Id)
                 {
+                    var receiptArticles = _mapper.Map<List<ReceiptArticle>>(receiptDTO.ReceiptArticles);
                     // Update properties
-                    existingReceipt.Date = receipt.Date;
-                    existingReceipt.ReceiptArticles = receipt.ReceiptArticles;
-                    existingReceipt.TotalAmount = RecepitCalculator.CalculateTotalReceiptAmount(receipt.ReceiptArticles);
+                    existingReceipt.Date = receiptDTO.Date;
+                    existingReceipt.ReceiptArticles = receiptArticles;
+                    existingReceipt.TotalAmount = RecepitCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
                     await _receiptRepository.UpdateAsync(existingReceipt);
                     await _receiptRepository.SaveAsync();
-                    response.Result = existingReceipt;
+                    response.Result = _mapper.Map<ReceiptDTO>(existingReceipt);
                     response.IsSuccess = true;
                     response.StatusCode = HttpStatusCode.OK;
                 }
@@ -148,7 +159,7 @@ namespace ReceiptServer.Services
                 {
                     response.IsSuccess = false;
                     response.StatusCode = HttpStatusCode.NotFound;
-                    response.ErrorMessages.Add($"Receipt with ID {receipt.Id} not found.");
+                    response.ErrorMessages.Add($"Receipt with ID {receiptDTO.Id} not found.");
                 }
             }
             catch (Exception ex)
@@ -161,9 +172,9 @@ namespace ReceiptServer.Services
 
         }
 
-        public async Task<APIResponse<Receipt>> DeleteAsync(int id)
+        public async Task<APIResponse<ReceiptDTO>> DeleteAsync(int id)
         {
-            var response = new APIResponse<Receipt>();
+            var response = new APIResponse<ReceiptDTO>();
             try
             {
                 var receiptToDelete = await _receiptRepository.GetByIdAsync(id);
@@ -172,7 +183,7 @@ namespace ReceiptServer.Services
                     await _receiptRepository.DeleteAsync(receiptToDelete);
                     await _receiptRepository.SaveAsync();
 
-                    response.Result = receiptToDelete;
+                    response.Result = _mapper.Map<ReceiptDTO>(receiptToDelete); ;
                     response.IsSuccess = true;
                     response.StatusCode = HttpStatusCode.NoContent;
                 }

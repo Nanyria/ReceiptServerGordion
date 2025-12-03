@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReceiptServer.Repositories;
 using ReceiptServer.Services;
+using RecieptServer.Models;
 
 namespace ReceiptServer.Controllers
 {
@@ -27,17 +28,17 @@ namespace ReceiptServer.Controllers
             return StatusCode((int)response.Result.StatusCode, response);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateReceipt([FromBody] Models.Receipt receipt)
+        public async Task<IActionResult> CreateReceipt([FromBody] ReceiptDTO receiptDTO)
         {
-            var response = await _receiptService.CreateAsync(receipt);
+            var response = await _receiptService.CreateAsync(receiptDTO);
             return StatusCode((int)response.StatusCode, response);
 
         }
         [HttpPut("{receiptId:int}")]
-        public async Task<IActionResult> UpdateReceipt(int receiptId, [FromBody] Models.Receipt receipt)
+        public async Task<IActionResult> UpdateReceipt(int receiptId, [FromBody] ReceiptDTO receiptDTO)
         {
-            receipt.Id = receiptId;
-            var response = await _receiptService.UpdateAsync(receipt);
+            receiptDTO.Id = receiptId;
+            var response = await _receiptService.UpdateAsync(receiptDTO);
             return StatusCode((int)response.StatusCode, response);
         }
         [HttpDelete("{receiptId:int}")]
