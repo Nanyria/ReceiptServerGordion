@@ -10,8 +10,11 @@ namespace RecieptServer
         {
             // Article
             CreateMap<ArticleDTO, Article>()
-                .ForMember(dest => dest.Id, opt => opt.Ignore());
-            CreateMap<Article, ArticleDTO>();
+                .ForMember(dest => dest.ReceiptArticles, opt => opt.MapFrom(src => src.ReceiptArticles));
+
+            CreateMap<Article, ArticleDTO>()
+                .ForMember(dest => dest.ReceiptArticles, opt => opt.MapFrom(src => src.ReceiptArticles));
+
 
             // ReceiptArticle: DTO -> entity
             CreateMap<ReceiptArticleDTO, ReceiptArticle>()

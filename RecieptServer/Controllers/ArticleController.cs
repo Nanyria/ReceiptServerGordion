@@ -10,8 +10,8 @@ namespace ReceiptServer.Controllers
     public class ArticleController : ControllerBase
     {
 
-        private readonly ArticleService _articleService;
-        public ArticleController(ArticleService articleService)
+        private readonly ArticleSer _articleService;
+        public ArticleController(ArticleSer articleService)
         {
             _articleService = articleService;
         }

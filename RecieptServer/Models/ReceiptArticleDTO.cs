@@ -5,6 +5,7 @@ namespace RecieptServer.Models
 {
     public class ReceiptArticleDTO
     {
+        public int Id { get; set; }
         public int ArticleId { get; set; }
         public string Name { get; set; } = string.Empty;
 
@@ -14,4 +15,4 @@ namespace RecieptServer.Models
 
         public decimal Total { get; set; }
     }
-}
+}       
