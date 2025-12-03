@@ -9,27 +9,27 @@ namespace ReceiptServer.Controllers
     public class ReceiptController : ControllerBase
     {
 
-        private readonly IReceiptService _receiptService;
-        public ReceiptController(IReceiptService receiptService)
+        private readonly ReceiptService _receiptService;
+        public ReceiptController(ReceiptService receiptService)
         {
             _receiptService = receiptService;
         }
         [HttpGet]
         public async Task<IActionResult> GetAllReceipts()
         {
-            var response = await _receiptService.GetAllReceiptsAsync();
+            var response = await _receiptService.GetAllAsync();
             return StatusCode((int)response.StatusCode, response);
         }
         [HttpGet("getSingle/{getSingle}")]
         public IActionResult GetSingleReceipt(int getSingle)
         {
-            var response = _receiptService.GetReceiptByIdAsync(getSingle);
+            var response = _receiptService.GetByIdAsync(getSingle);
             return StatusCode((int)response.Result.StatusCode, response);
         }
         [HttpPost]
         public async Task<IActionResult> CreateReceipt([FromBody] Models.Receipt receipt)
         {
-            var response = await _receiptService.CreateReceiptAsync(receipt);
+            var response = await _receiptService.CreateAsync(receipt);
             return StatusCode((int)response.StatusCode, response);
 
         }
@@ -37,13 +37,13 @@ namespace ReceiptServer.Controllers
         public async Task<IActionResult> UpdateReceipt(int receiptId, [FromBody] Models.Receipt receipt)
         {
             receipt.Id = receiptId;
-            var response = await _receiptService.UpdateReceiptAsync(receipt);
+            var response = await _receiptService.UpdateAsync(receipt);
             return StatusCode((int)response.StatusCode, response);
         }
         [HttpDelete("{receiptId:int}")]
         public async Task<IActionResult> DeleteReceipt(int receiptId)
         {
-            var response = await _receiptService.DeleteReceiptAsync(receiptId);
+            var response = await _receiptService.DeleteAsync(receiptId);
             return StatusCode((int)response.StatusCode, response);
         }
 

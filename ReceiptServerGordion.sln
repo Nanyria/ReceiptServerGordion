@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecieptServer", "RecieptServer\RecieptServer.csproj", "{5FD0A21B-FAF7-4DD7-B838-B911DA55ADA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiptServiceUnitTests", "ReceiptServiceUnitTests\ReceiptServiceUnitTests.csproj", "{58D209FB-397E-424A-8124-04F44F6AE5FC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5FD0A21B-FAF7-4DD7-B838-B911DA55ADA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FD0A21B-FAF7-4DD7-B838-B911DA55ADA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FD0A21B-FAF7-4DD7-B838-B911DA55ADA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58D209FB-397E-424A-8124-04F44F6AE5FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58D209FB-397E-424A-8124-04F44F6AE5FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58D209FB-397E-424A-8124-04F44F6AE5FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58D209FB-397E-424A-8124-04F44F6AE5FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

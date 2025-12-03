@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ReceiptServer.Data;
+using ReceiptServer.Models;
 using ReceiptServer.Repositories;
 using ReceiptServer.Services;
+using RecieptServer.Services;
 using System.Text.Json.Serialization;
 
 namespace ReceiptServer
@@ -15,9 +17,7 @@ namespace ReceiptServer
             builder.Services.AddControllers()
                 .AddJsonOptions(opt =>
                 {
-                    // Ignore cycles to prevent the "possible object cycle" exception
                     opt.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-                    // Optionally increase max depth if you need deeper graphs
                     opt.JsonSerializerOptions.MaxDepth = 64;
                 });
             builder.Services.AddEndpointsApiExplorer();
@@ -32,8 +32,10 @@ namespace ReceiptServer
                           .AllowAnyHeader());
             });
 
-            builder.Services.AddScoped<IReceiptService, ReceiptService>();
-            builder.Services.AddScoped<IReceiptRepositoriy, ReceiptRepository>();
+            // for the concrete Receipt service
+            builder.Services.AddScoped<IReceiptServerService<Receipt>, ReceiptService>();
+
+            builder.Services.AddScoped<IReceiptServiceRepositoriy<Receipt>, ReceiptRepository>();
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("ConnectionToDB")));
 

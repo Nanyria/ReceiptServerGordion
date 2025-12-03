@@ -6,11 +6,12 @@ namespace ReceiptServer.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public int ReceiptNumber { get; set; }
+
         [Required]
         public DateTime Date { get; set; }
 
-        public List<Article> Articles { get; set; } = new();
+        // Many-to-many via ReceiptItem (join entity)
+        public List<ReceiptArticle> ReceiptArticles { get; set; } = new();
+        public decimal TotalAmount { get; set; }
     }
 }

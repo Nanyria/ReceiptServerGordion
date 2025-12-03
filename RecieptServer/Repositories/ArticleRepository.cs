@@ -6,36 +6,36 @@ using ReceiptServer.Data;
 
 namespace ReceiptServer.Repositories
 {
-    public class ReceiptRepository : IReceiptServiceRepositoriy<Receipt>
+    public class ArticleRepository : IReceiptServiceRepositoriy<Article>
     {
         private readonly AppDbContext _context;
-        public ReceiptRepository(AppDbContext context) => _context = context;
+        public ArticleRepository(AppDbContext context) => _context = context;
 
-        public async Task<IEnumerable<Receipt>> GetAllAsync()
-            => await _context.Receipts
+        public async Task<IEnumerable<Article>> GetAllAsync()
+            => await _context.Articles
                              .Include(r => r.ReceiptArticles)
                              .ToListAsync();
 
-        public async Task<Receipt?> GetByIdAsync(int id)
-            => await _context.Receipts
+        public async Task<Article?> GetByIdAsync(int id)
+            => await _context.Articles
                              .Include(r => r.ReceiptArticles)
                              .FirstOrDefaultAsync(r => r.Id == id);
 
-        public async Task CreateAsync(Receipt entity)
+        public async Task CreateAsync(Article entity)
         {
-            await _context.Receipts.AddAsync(entity);
+            await _context.Articles.AddAsync(entity);
             await SaveAsync();
         }
 
-        public async Task UpdateAsync(Receipt entity)
+        public async Task UpdateAsync(Article entity)
         {
-            _context.Receipts.Update(entity);
+            _context.Articles.Update(entity);
             await SaveAsync();
         }
 
-        public async Task DeleteAsync(Receipt entity)
+        public async Task DeleteAsync(Article entity)
         {
-            _context.Receipts.Remove(entity);
+            _context.Articles.Remove(entity);
             await SaveAsync();
         }
 
