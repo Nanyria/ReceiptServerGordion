@@ -3,7 +3,7 @@ using RecieptServer.Models;
 
 namespace ReceiptServer.Helpers
 {
-    public class RecepitCalculator
+    public class ReceiptCalculator
     {
         public static decimal CalculateTotalReceiptAmount(List<ReceiptArticleDTO> receiptItemsDTO)
         {

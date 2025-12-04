@@ -46,11 +46,11 @@ namespace ReceiptServer.Services
                 }
                 foreach (var article in receiptDTO.ReceiptArticles)
                 {
-                    RecepitCalculator.CalculateTotalArticleAmount(article);
+                    ReceiptCalculator.CalculateTotalArticleAmount(article);
                 }
 
                 var receiptArticles = _mapper.Map<List<ReceiptArticle>>(receiptDTO.ReceiptArticles);
-                var receiptTotal = RecepitCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
+                var receiptTotal = ReceiptCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
                 var createdReceipt = new Receipt
                 {
                     Date = receiptDTO.Date,
@@ -148,7 +148,7 @@ namespace ReceiptServer.Services
                     // Update properties
                     existingReceipt.Date = receiptDTO.Date;
                     existingReceipt.ReceiptArticles = receiptArticles;
-                    existingReceipt.TotalAmount = RecepitCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
+                    existingReceipt.TotalAmount = ReceiptCalculator.CalculateTotalReceiptAmount(receiptDTO.ReceiptArticles);
                     await _receiptRepository.UpdateAsync(existingReceipt);
                     await _receiptRepository.SaveAsync();
                     response.Result = _mapper.Map<ReceiptDTO>(existingReceipt);

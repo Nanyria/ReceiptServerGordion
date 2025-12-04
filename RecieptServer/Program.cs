@@ -54,15 +54,6 @@ namespace ReceiptServer
                 var dbContext = services.GetRequiredService<AppDbContext>();
                 var logger = services.GetRequiredService<ILogger<Program>>();
 
-                //try
-                //{
-                //    dbContext.Database.Migrate();
-                //}
-                //catch (Exception ex)
-                //{
-                //    logger.LogError(ex, "Database migration failed.");
-                //    throw;
-                //}
             }
 
             // Configure the HTTP request pipeline.
