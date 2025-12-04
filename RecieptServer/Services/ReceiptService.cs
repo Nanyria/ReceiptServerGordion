@@ -102,7 +102,7 @@ namespace ReceiptServer.Services
         }
 
         public async Task<APIResponse<ReceiptDTO>> GetByIdAsync(int id)
-        {// Meddelande bör ge svar om kvittonummer ist för id
+        {
             var response = new APIResponse<ReceiptDTO>();
             try
             {
@@ -183,7 +183,7 @@ namespace ReceiptServer.Services
                     await _receiptRepository.DeleteAsync(receiptToDelete);
                     await _receiptRepository.SaveAsync();
 
-                    response.Result = _mapper.Map<ReceiptDTO>(receiptToDelete); ;
+                    response.Result = _mapper.Map<ReceiptDTO>(receiptToDelete); 
                     response.IsSuccess = true;
                     response.StatusCode = HttpStatusCode.NoContent;
                 }

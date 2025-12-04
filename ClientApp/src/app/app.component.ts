@@ -87,9 +87,5 @@ export class AppComponent implements OnInit {
     });
   }
 
-  computeTotal(receipt: Receipt): number {
-    if (!receipt) return 0;
-    if (receipt.totalAmount) return receipt.totalAmount;
-    return (receipt.receiptArticles || []).reduce((s, a) => s + (a.total ?? (a.unitPrice * a.quantity)), 0);
-  }
+
 }
