@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReceiptServer.Data;
 
@@ -11,9 +12,11 @@ using ReceiptServer.Data;
 namespace RecieptServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203204751_updateSeedData")]
+    partial class updateSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,27 +48,27 @@ namespace RecieptServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1001,
-                            Name = "Mjölk",
-                            Price = 22.99m
+                            Id = 1,
+                            Name = "Milk",
+                            Price = 1.99m
                         },
                         new
                         {
-                            Id = 1002,
-                            Name = "Bröd",
-                            Price = 38.49m
+                            Id = 2,
+                            Name = "Bread",
+                            Price = 2.49m
                         },
                         new
                         {
-                            Id = 1003,
-                            Name = "Ägg",
-                            Price = 37.50m
+                            Id = 3,
+                            Name = "Eggs",
+                            Price = 3.50m
                         },
                         new
                         {
-                            Id = 1004,
-                            Name = "Anteckningsbok",
-                            Price = 85.00m
+                            Id = 4,
+                            Name = "Notebook",
+                            Price = 5.00m
                         });
                 });
 
@@ -93,13 +96,13 @@ namespace RecieptServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1001,
+                            Id = 1,
                             Date = new DateTime(2025, 11, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 6.47m
                         },
                         new
                         {
-                            Id = 1002,
+                            Id = 2,
                             Date = new DateTime(2025, 11, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             TotalAmount = 18.50m
                         });
@@ -141,102 +144,39 @@ namespace RecieptServer.Migrations
                     b.HasData(
                         new
                         {
-                            Id = 1001,
-                            ArticleId = 1001,
+                            Id = 1,
+                            ArticleId = 1,
                             Quantity = 2,
-                            ReceiptId = 1001,
-                            Total = 45.98m,
-                            UnitPrice = 22.99m
+                            ReceiptId = 1,
+                            Total = 3.98m,
+                            UnitPrice = 1.99m
                         },
                         new
                         {
-                            Id = 1002,
-                            ArticleId = 1002,
+                            Id = 2,
+                            ArticleId = 2,
                             Quantity = 1,
-                            ReceiptId = 1001,
-                            Total = 38.49m,
-                            UnitPrice = 38.49m
+                            ReceiptId = 1,
+                            Total = 2.49m,
+                            UnitPrice = 2.49m
                         },
                         new
                         {
-                            Id = 1003,
-                            ArticleId = 1003,
+                            Id = 3,
+                            ArticleId = 3,
                             Quantity = 1,
-                            ReceiptId = 1002,
-                            Total = 37.50m,
-                            UnitPrice = 37.50m
+                            ReceiptId = 2,
+                            Total = 3.50m,
+                            UnitPrice = 3.50m
                         },
                         new
                         {
-                            Id = 1004,
-                            ArticleId = 1004,
+                            Id = 4,
+                            ArticleId = 4,
                             Quantity = 3,
-                            ReceiptId = 1002,
-                            Total = 255.00m,
-                            UnitPrice = 85.00m
-                        },
-                        new
-                        {
-                            Id = 1005,
-                            ArticleId = 1001,
-                            Quantity = 1,
-                            ReceiptId = 1003,
-                            Total = 22.99m,
-                            UnitPrice = 22.99m
-                        },
-                        new
-                        {
-                            Id = 1006,
-                            ArticleId = 1002,
-                            Quantity = 2,
-                            ReceiptId = 1004,
-                            Total = 76.98m,
-                            UnitPrice = 38.49m
-                        },
-                        new
-                        {
-                            Id = 1007,
-                            ArticleId = 1003,
-                            Quantity = 4,
-                            ReceiptId = 1005,
-                            Total = 150.00m,
-                            UnitPrice = 37.50m
-                        },
-                        new
-                        {
-                            Id = 1008,
-                            ArticleId = 1004,
-                            Quantity = 1,
-                            ReceiptId = 1006,
-                            Total = 85.00m,
-                            UnitPrice = 85.00m
-                        },
-                        new
-                        {
-                            Id = 1009,
-                            ArticleId = 1002,
-                            Quantity = 1,
-                            ReceiptId = 1007,
-                            Total = 38.49m,
-                            UnitPrice = 38.49m
-                        },
-                        new
-                        {
-                            Id = 1010,
-                            ArticleId = 1001,
-                            Quantity = 3,
-                            ReceiptId = 1008,
-                            Total = 68.97m,
-                            UnitPrice = 22.99m
-                        },
-                        new
-                        {
-                            Id = 1011,
-                            ArticleId = 1004,
-                            Quantity = 2,
-                            ReceiptId = 1009,
-                            Total = 170.00m,
-                            UnitPrice = 85.00m
+                            ReceiptId = 2,
+                            Total = 15.00m,
+                            UnitPrice = 5.00m
                         });
                 });
 

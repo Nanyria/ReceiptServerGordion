@@ -14,11 +14,13 @@ namespace ReceiptServer.Repositories
         public async Task<IEnumerable<Receipt>> GetAllAsync()
             => await _context.Receipts
                              .Include(r => r.ReceiptArticles)
+                                .ThenInclude(ra => ra.Article) 
                              .ToListAsync();
 
         public async Task<Receipt?> GetByIdAsync(int id)
             => await _context.Receipts
                              .Include(r => r.ReceiptArticles)
+                                .ThenInclude(ra => ra.Article) 
                              .FirstOrDefaultAsync(r => r.Id == id);
 
         public async Task CreateAsync(Receipt entity)

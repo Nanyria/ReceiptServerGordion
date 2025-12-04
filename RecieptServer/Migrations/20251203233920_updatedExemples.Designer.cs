@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReceiptServer.Data;
 
@@ -11,9 +12,11 @@ using ReceiptServer.Data;
 namespace RecieptServer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251203233920_updatedExemples")]
+    partial class updatedExemples
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,25 +49,25 @@ namespace RecieptServer.Migrations
                         new
                         {
                             Id = 1001,
-                            Name = "Mjölk",
+                            Name = "Milk",
                             Price = 22.99m
                         },
                         new
                         {
                             Id = 1002,
-                            Name = "Bröd",
+                            Name = "Bread",
                             Price = 38.49m
                         },
                         new
                         {
                             Id = 1003,
-                            Name = "Ägg",
+                            Name = "Eggs",
                             Price = 37.50m
                         },
                         new
                         {
                             Id = 1004,
-                            Name = "Anteckningsbok",
+                            Name = "Notebook",
                             Price = 85.00m
                         });
                 });

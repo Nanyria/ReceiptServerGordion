@@ -1,0 +1,82 @@
+
+
+    <main class="main" style="padding:1rem;">
+      <section style="display:flex;gap:2rem;align-items:flex-start;">
+        <style>
+          :host { box-sizing: border-box; font-family: Inter, Roboto, Arial, sans-serif; }
+          main { max-width: 980px; margin: 0 auto; }
+          table th, table td { font-size: 0.95rem; }
+        </style>
+
+        <main class="main" style="padding:1rem;">
+          <h1>Kvittolista</h1>
+
+          <section style="display:flex;gap:2rem;align-items:flex-start;">
+            <!-- Left: list of receipts -->
+            <div class="list-col">
+              <h2>Alla kvitton</h2>
+              <div *ngIf="loadingList">Hämtar kvitton…</div>
+              <div *ngIf="!loadingList && receipts.length === 0">Inga kvitton hittades.</div>
+              <table *ngIf="receipts.length > 0" style="width:100%;border-collapse:collapse;">
+                <thead>
+                  <tr>
+                    <th style="text-align:left;padding:6px;border-bottom:1px solid #ddd;">Kvitto #</th>
+                    <th style="text-align:left;padding:6px;border-bottom:1px solid #ddd;">Datum</th>
+                    <th style="text-align:right;padding:6px;border-bottom:1px solid #ddd;">Belopp</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let r of receipts" (click)="selectedReceipt = r" style="cursor:pointer;">
+                    <td style="padding:6px;border-bottom:1px solid #f3f3f3;">{{ r.id }}</td>
+                    <td style="padding:6px;border-bottom:1px solid #f3f3f3;">{{ r.date | date:'shortDate' }}</td>
+                    <td style="padding:6px;border-bottom:1px solid #f3f3f3;text-align:right;">{{ computeTotal(r) | number:'1.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Right: lookup + receipt view -->
+            <div style="flex:1;">
+              <h2>Sök kvitto</h2>
+              <div style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.5rem;">
+                <input type="number" [(ngModel)]="queryId" placeholder="Kvittonummer" style="padding:6px;flex:1;" />
+                <button (click)="fetchReceipt()" style="padding:6px 10px;">Hämta</button>
+              </div>
+              <div *ngIf="loadingReceipt">Hämtar kvitto…</div>
+              <div *ngIf="error" style="color:crimson;margin-bottom:0.5rem;">{{ error }}</div>
+
+              <section *ngIf="selectedReceipt" style="border:1px solid #e6e6e6;padding:12px;border-radius:6px;">
+                <h3>Kvitto #{{ selectedReceipt.id }}</h3>
+                <div>{{ selectedReceipt.date | date:'fullDate' }}</div>
+                <hr />
+                <table style="width:100%;border-collapse:collapse;margin-top:8px;">
+                  <thead>
+                    <tr>
+                      <th style="text-align:left;padding:6px;border-bottom:1px solid #ddd;">Artikel</th>
+                      <th style="text-align:right;padding:6px;border-bottom:1px solid #ddd;">Antal</th>
+                      <th style="text-align:right;padding:6px;border-bottom:1px solid #ddd;">Pris</th>
+                      <th style="text-align:right;padding:6px;border-bottom:1px solid #ddd;">Totalt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let a of selectedReceipt.receiptArticles">
+                      <td style="padding:6px;border-bottom:1px solid #f3f3f3;">{{ a.name }}</td>
+                      <td style="padding:6px;border-bottom:1px solid #f3f3f3;text-align:right;">{{ a.quantity }}</td>
+                      <td style="padding:6px;border-bottom:1px solid #f3f3f3;text-align:right;">{{ a.unitPrice | number:'1.2-2' }}</td>
+                      <td style="padding:6px;border-bottom:1px solid #f3f3f3;text-align:right;">{{ (a.total) | number:'1.2-2' }}</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td colspan="3" style="text-align:right;padding:8px;font-weight:600;">Totalt:</td>
+                      <td style="text-align:right;padding:8px;font-weight:600;">{{ computeTotal(selectedReceipt) | number:'1.2-2' }}</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </section>
+            </div>
+          </section>
+
+          <hr style="margin:1rem 0;" />
+          <router-outlet></router-outlet>
+        </main>

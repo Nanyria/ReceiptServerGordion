@@ -36,9 +36,11 @@ namespace ReceiptServer
 
             // for the concrete Receipt service
             builder.Services.AddScoped<IReceiptServerService<ReceiptDTO>, ReceiptService>();
-
+            builder.Services.AddScoped<IReceiptServerService<ArticleDTO>, ArticleService>();
+			
             builder.Services.AddScoped<IReceiptServiceRepositoriy<Receipt>, ReceiptRepository>();
-            builder.Services.AddAutoMapper(typeof(MappingConfig));
+            builder.Services.AddScoped<IReceiptServiceRepositoriy<Article>, ArticleRepository>();
+			builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 
             builder.Services.AddDbContext<AppDbContext>(options =>

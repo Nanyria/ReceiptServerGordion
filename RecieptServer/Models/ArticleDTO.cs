@@ -14,4 +14,9 @@ namespace RecieptServer.Models
 
         public List<ReceiptArticleDTO> ReceiptArticles { get; set; } = new();
     }
+    public class ArticleCreateDTO
+    {
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+    }
 }

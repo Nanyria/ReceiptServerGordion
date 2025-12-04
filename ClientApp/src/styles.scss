@@ -1,0 +1,123 @@
+/* App component styles: layout, tables, inputs and receipt card */
+
+:root {
+	--bg: #fbfbfb;
+	--muted: #6b7280;
+	--accent: #2563eb;
+	--card: #ffffff;
+	--border: #e6e6e6;
+	--shadow: 0 4px 12px rgba(16,24,40,0.06);
+}
+
+/* Ensure the app fills the viewport so the section can expand */
+html, body, app-root {
+	height: 100%;
+}
+
+main.main {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	max-width: 1100px;
+	margin: 0 auto; /* top/bottom spacing handled by internal padding */
+	padding: 20px;
+	background: var(--bg);
+	color: #111827;
+}
+
+h1 { font-size: 1.6rem; margin: 0 0 12px 0; }
+h2 { font-size: 1.1rem; margin: 0 0 10px 0; color: var(--muted); }
+
+/* top-level layout wrapper */
+
+.main > section {
+	display: flex;
+	gap: 24px;
+	align-items: flex-start;
+	flex: 1 1 auto; /* take remaining vertical space inside main */
+}
+
+/* Left column (receipt list) - allow it to be wider */
+.list-col {
+	flex: 1 1 520px;
+	max-width: 720px;
+	min-width: 320px;
+}
+
+/* Left column: list */
+.main table {
+	width: 100%;
+	border-collapse: collapse;
+	background: transparent;
+}
+
+.main table thead th {
+	text-align: left;
+	font-weight: 600;
+	color: var(--muted);
+	font-size: 0.9rem;
+	padding: 8px 6px;
+}
+
+.main table tbody td {
+	padding: 10px 6px;
+	border-bottom: 1px solid var(--border);
+	font-size: 0.95rem;
+}
+
+.main table tbody tr {
+	background: transparent;
+	transition: background-color 120ms ease, transform 120ms ease;
+}
+
+.main table tbody tr:hover {
+	background: rgba(37,99,235,0.04);
+	transform: translateY(-1px);
+}
+
+/* Highlight selected receipt if the user clicks it (no class required) */
+table tbody tr:active, table tbody tr:focus, table tbody tr:hover { cursor: pointer; }
+
+/* Right column: lookup and receipt card */
+.main input[type="number"] {
+	border: 1px solid var(--border);
+	padding: 8px 10px;
+	border-radius: 6px;
+	background: var(--card);
+	outline: none;
+}
+
+.main button {
+	background: var(--accent);
+	color: white;
+	border: none;
+	padding: 8px 12px;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: background-color 120ms ease, transform 80ms ease;
+}
+
+.main button:hover { background: #1e40af; transform: translateY(-1px); }
+
+.receipt-card {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 8px;
+	padding: 14px;
+	box-shadow: var(--shadow);
+}
+
+.receipt-card h3 { margin: 0 0 6px 0; }
+.receipt-card hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+
+table tfoot td { font-weight: 700; }
+
+/* Responsive: stack columns under 820px */
+@media (max-width: 820px) {
+	.main > section { flex-direction: column; }
+	.main > section > div { max-width: 100%; }
+	.main table thead { display: none; }
+	.main table tbody td { display: block; width: 100%; }
+	.main table tbody tr { margin-bottom: 8px; border-radius: 6px; background: var(--card); padding: 8px; }
+}
+

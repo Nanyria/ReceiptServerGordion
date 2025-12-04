@@ -57,25 +57,37 @@ namespace ReceiptServer.Data
             });
 
             // Seed receipts (IDs and FK usage must match)
+            // Totals must reflect seeded receipt items
             modelBuilder.Entity<Receipt>().HasData(
-                new Receipt { Id = 1, Date = new DateTime(2025, 11, 01), TotalAmount = 0m },
-                new Receipt { Id = 2, Date = new DateTime(2025, 11, 15), TotalAmount = 0m }
+                new Receipt { Id = 1001, Date = new DateTime(2025, 11, 01), TotalAmount = 6.47m },
+                new Receipt { Id = 1002, Date = new DateTime(2025, 11, 15), TotalAmount = 18.50m }
             );
 
             // Seed articles (catalog)
             modelBuilder.Entity<Article>().HasData(
-                new Article { Id = 1, Name = "Milk", Price = 1.99m },
-                new Article { Id = 2, Name = "Bread", Price = 2.49m },
-                new Article { Id = 3, Name = "Eggs", Price = 3.50m },
-                new Article { Id = 4, Name = "Notebook", Price = 5.00m }
+                new Article { Id = 1001, Name = "Mjölk", Price = 22.99m },
+                new Article { Id = 1002, Name = "Bröd", Price = 38.49m },
+                new Article { Id = 1003, Name = "Ägg", Price = 37.50m },
+                new Article { Id = 1004, Name = "Anteckningsbok", Price = 85.00m }
             );
 
             // Seed receipt items (lines) linking receipts and articles
+            // Include Total for each line (Quantity * UnitPrice)
             modelBuilder.Entity<ReceiptArticle>().HasData(
-                new ReceiptArticle { Id = 1, ReceiptId = 1, ArticleId = 1, Quantity = 2, UnitPrice = 1.99m },
-                new ReceiptArticle { Id = 2, ReceiptId = 1, ArticleId = 2, Quantity = 1, UnitPrice = 2.49m },
-                new ReceiptArticle { Id = 3, ReceiptId = 2, ArticleId = 3, Quantity = 1, UnitPrice = 3.50m },
-                new ReceiptArticle { Id = 4, ReceiptId = 2, ArticleId = 4, Quantity = 3, UnitPrice = 5.00m }
+                // existing receipts corrected to 100x IDs and article IDs
+                new ReceiptArticle { Id = 1001, ReceiptId = 1001, ArticleId = 1001, Quantity = 2, UnitPrice = 22.99m, Total = 45.98m },
+                new ReceiptArticle { Id = 1002, ReceiptId = 1001, ArticleId = 1002, Quantity = 1, UnitPrice = 38.49m, Total = 38.49m },
+                new ReceiptArticle { Id = 1003, ReceiptId = 1002, ArticleId = 1003, Quantity = 1, UnitPrice = 37.50m, Total = 37.50m },
+                new ReceiptArticle { Id = 1004, ReceiptId = 1002, ArticleId = 1004, Quantity = 3, UnitPrice = 85.00m, Total = 255.00m },
+
+                // new receipt lines for receipts 1003..1009 (one line each)
+                new ReceiptArticle { Id = 1005, ReceiptId = 1003, ArticleId = 1001, Quantity = 1, UnitPrice = 22.99m, Total = 22.99m },
+                new ReceiptArticle { Id = 1006, ReceiptId = 1004, ArticleId = 1002, Quantity = 2, UnitPrice = 38.49m, Total = 76.98m },
+                new ReceiptArticle { Id = 1007, ReceiptId = 1005, ArticleId = 1003, Quantity = 4, UnitPrice = 37.50m, Total = 150.00m },
+                new ReceiptArticle { Id = 1008, ReceiptId = 1006, ArticleId = 1004, Quantity = 1, UnitPrice = 85.00m, Total = 85.00m },
+                new ReceiptArticle { Id = 1009, ReceiptId = 1007, ArticleId = 1002, Quantity = 1, UnitPrice = 38.49m, Total = 38.49m },
+                new ReceiptArticle { Id = 1010, ReceiptId = 1008, ArticleId = 1001, Quantity = 3, UnitPrice = 22.99m, Total = 68.97m },
+                new ReceiptArticle { Id = 1011, ReceiptId = 1009, ArticleId = 1004, Quantity = 2, UnitPrice = 85.00m, Total = 170.00m }
             );
         }
 
